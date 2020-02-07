@@ -93,7 +93,7 @@ class Game extends React.Component {
     if (calculateWinner(squares) || squares[i]) {
       return;
     }
-    squares[i] = this.state.xIsNext ? 'X' : 'O';
+    squares[i] = this.state.xIsNext ? 'P1' : 'P2';
     this.setState({
       history: history.concat([{
         squares: squares
@@ -143,10 +143,15 @@ class Game extends React.Component {
     })
     let status;
     if (winner) {
-      status = 'Winner: ' + winner;
+      if (winner === 'P1') {
+        status = 'Winner: Player1';
+      }
+      else {
+        status = 'Winner: Player2';
+      }
     }
     else {
-      status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+      status = 'Next player: ' + (this.state.xIsNext ? 'Player1' : 'Player2');
     }
     return (
       <div className="game">
@@ -158,6 +163,16 @@ class Game extends React.Component {
         <div className="game-info">
           <div>{status}</div>
           <ol>{moves}</ol>
+          <h3>Game rules:</h3>
+          <ol>
+            <li>This is a simple tictactoe game which can be played by two players.</li>
+            <li>Player one needs to select a box followed by Player two.</li>
+            <li>Each player needs to restrict the other player from selecting 4 boxes in order.</li>
+            <li>Whoever manages to select the 4 boxes in order wins the game.</li>
+            <li>In the below image, Player2 won the game because he managed to select the 4 boxes in order.</li>
+            <img src={require("./demoimage.png")} alt="Demo" width="500" height="333"></img>
+          </ol>
+
         </div>
       </div>
     );
