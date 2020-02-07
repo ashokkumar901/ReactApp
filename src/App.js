@@ -73,12 +73,12 @@ class Board extends React.Component {
 }
 
 class Game extends React.Component {
+  globalIndex = [0];
   constructor(props) {
     super(props);
     this.state = {
       history: [{
-        squares: [],
-        positions: []
+        squares: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]
       }
       ],
       stepNumber: 0,
@@ -86,20 +86,17 @@ class Game extends React.Component {
     }
   }
   handleClick(i) {
+    this.globalIndex.push(i);
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
     const current = history[history.length - 1];
     const squares = current.squares.slice();
-    let positions = current.positions.slice();
     if (calculateWinner(squares) || squares[i]) {
       return;
     }
     squares[i] = this.state.xIsNext ? 'X' : 'O';
-    positions.push(this.findPosition(i))
-    console.log('squares', squares)
     this.setState({
       history: history.concat([{
-        squares: squares,
-        positions: positions
+        squares: squares
       }]),
       xIsNext: !this.state.xIsNext,
       stepNumber: history.length
@@ -130,20 +127,11 @@ class Game extends React.Component {
     else if (element === 15) return [4, 4]
   }
   render() {
-    let lastMove = [];
-    let slicedMove;
     const history = this.state.history;
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
-    let positions = [...history[history.length - 1]['positions']];
-    let last = (history[history.length - 1]['positions']).length - 1;
-    lastMove = positions[last];
-    if(lastMove!==undefined){
-      slicedMove = lastMove
-    }
-    // let showMove = [...lastMove]
     const moves = history.map((step, move) => {
-      const desc = move ? 'Go to move #' + move + ' position(' + slicedMove + ')' :
+      const desc = move ? 'Go to move #' + move + ' position(' + this.findPosition(this.globalIndex[move]) + ')' :
         'Go to game start';
       return (
         <li key={move}>
