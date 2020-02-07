@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-
+import $ from "jquery";
 let calculateWinner = (squares) => {
   const lines = [
     [0, 1, 2, 3],
@@ -102,7 +102,10 @@ class Game extends React.Component {
       stepNumber: history.length
     })
   }
-  jumpTo(step) {
+  jumpTo(index, step) {
+    $(index.target).css({
+      'background-color': '#ccc'
+    });
     this.setState({
       stepNumber: step,
       xIsNext: (step % 2) === 0
@@ -135,7 +138,7 @@ class Game extends React.Component {
         'Go to game start';
       return (
         <li key={move}>
-          <button onClick={() => this.jumpTo(move)}>
+          <button onClick={(index) => this.jumpTo(index, move)}>
             {desc}
           </button>
         </li>
